@@ -28,16 +28,24 @@ pipeline {
             }
         }
 
-        stage('Verify Website') {
-            steps {
-                powershell '''
-                $response = Invoke-WebRequest "http://localhost:8081" -TimeoutSec 15
-                if ($response.StatusCode -ne 200) {
-                    throw "Website verification failed"
-                }
-                Write-Host "Portfolio website deployed successfully"
-                '''
-            }
+        
+stage('Verify Website') {
+    steps {
+        powershell '''
+        $response = Invoke-WebRequest `
+            -Uri "http://localhost:8081" `
+            -UseBasicParsing `
+            -TimeoutSec 15
+
+        if ($response.StatusCode -ne 200) {
+            throw "Website verification failed"
         }
+
+        Write-Host "Portfolio website deployed successfully"
+        Write-Host "HTTP Status: $($response.StatusCode)"
+        '''
+    }
+}
+
     }
 }
