@@ -56,14 +56,21 @@ pipeline {
             }
         }
 
-        stage('Selenium Tests') {
-            steps {
-                bat '''
-                python -m pip install -r requirements.txt
-                set "SELENIUM_REMOTE_URL=http://localhost:4444" && set "BASE_URL=http://host.docker.internal:8082" && python -m unittest discover -s tests -v
-                '''
-            }
-        }
+        
+stage('Selenium Tests') {
+    steps {
+        bat '''
+        "C:\\Portfolio-CD\\.venv\\Scripts\\python.exe" -m pip install -r requirements.txt
+        if errorlevel 1 exit /b 1
+
+        set "SELENIUM_REMOTE_URL=http://localhost:4444"
+        set "BASE_URL=http://host.docker.internal:8082"
+
+        "C:\\Portfolio-CD\\.venv\\Scripts\\python.exe" -m unittest discover -s tests -v
+        '''
+    }
+}
+
 
         stage('Deploy Website') {
             steps {
